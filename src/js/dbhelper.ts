@@ -32,7 +32,7 @@ class DBHelper {
     }
 
     /**
-     * Fetch a restaurant by its ID.
+     * Fetch a restaurantLocal by its ID.
      */
     static fetchRestaurantById(id, callback) {
         // fetch all restaurants with proper error handling.
@@ -41,7 +41,7 @@ class DBHelper {
                 callback(error, null);
             } else {
                 const restaurant = restaurants.find(r => r.id === id);
-                if (restaurant) { // Got the restaurant
+                if (restaurant) { // Got the restaurantLocal
                     callback(null, restaurant);
                 } else { // Restaurant does not exist in the database
                     callback('Restaurant does not exist', null);
@@ -161,7 +161,7 @@ class DBHelper {
     }
 
     /**
-     * Map marker for a restaurant.
+     * Map marker for a restaurantLocal.
      */
     static mapMarkerForRestaurant(restaurant, map) {
         // https://leafletjs.com/reference-1.3.0.html#marker
@@ -171,15 +171,15 @@ class DBHelper {
                 alt: restaurant.name,
                 url: DBHelper.urlForRestaurant(restaurant)
             });
-        marker.addTo(newMap);
+        marker.addTo(restaurantMap);
         return marker;
     }
 
-    /* static mapMarkerForRestaurant(restaurant, map) {
+    /* static mapMarkerForRestaurant(restaurantLocal, map) {
       const marker = new google.maps.Marker({
-        position: restaurant.latlng,
-        title: restaurant.name,
-        url: DBHelper.urlForRestaurant(restaurant),
+        position: restaurantLocal.latlng,
+        title: restaurantLocal.name,
+        url: DBHelper.urlForRestaurant(restaurantLocal),
         map: map,
         animation: google.maps.Animation.DROP}
       );

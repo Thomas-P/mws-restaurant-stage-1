@@ -1,5 +1,5 @@
-var restaurant;
-var newMap;
+let restaurantLocal;
+let restaurantMap;
 
 /**
  * Initialize map as soon as the page is loaded.
@@ -11,12 +11,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 /**
  * Initialize leaflet map
  */
-initMap = () => {
+const initMap = () => {
     fetchRestaurantFromURL((error, restaurant) => {
         if (error) { // Got an error!
             console.error(error);
         } else {
-            self.newMap = L.map('map', {
+            restaurantMap = L.map('map', {
                 center: [restaurant.latlng.lat, restaurant.latlng.lng],
                 zoom: 16,
                 scrollWheelZoom: false
@@ -28,44 +28,44 @@ initMap = () => {
                 '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
                 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 id: 'mapbox.streets'
-            }).addTo(newMap);
+            }).addTo(restaurantMap);
             fillBreadcrumb();
-            DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
+            DBHelper.mapMarkerForRestaurant(restaurant, restaurantMap);
         }
     });
 };
 
-/* window.initMap = () => {
-  fetchRestaurantFromURL((error, restaurant) => {
+/* window.initMapMain = () => {
+  fetchRestaurantFromURL((error, restaurantLocal) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
       self.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 16,
-        center: restaurant.latlng,
+        center: restaurantLocal.latlng,
         scrollwheel: false
       });
       fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+      DBHelper.mapMarkerForRestaurant(restaurantLocalLocal, self.map);
     }
   });
 } */
 
 /**
- * Get current restaurant from page URL.
+ * Get current restaurantLocal from page URL.
  */
-fetchRestaurantFromURL = (callback) => {
-    if (self.restaurant) { // restaurant already fetched!
-        callback(null, self.restaurant);
+const fetchRestaurantFromURL = (callback) => {
+    if (restaurantLocal) { // restaurantLocal already fetched!
+        callback(null, restaurantLocal);
         return;
     }
     const id = Number(getParameterByName('id'));
     if (!id) { // no id found in URL
-        error = 'No restaurant id in URL';
+        const error = 'No restaurantLocal id in URL';
         callback(error, null);
     } else {
         DBHelper.fetchRestaurantById(id, (error, restaurant) => {
-            self.restaurant = restaurant;
+            restaurantLocal = restaurant;
             if (!restaurant) {
                 console.error(error);
                 return;
@@ -77,17 +77,17 @@ fetchRestaurantFromURL = (callback) => {
 };
 
 /**
- * Create restaurant HTML and add it to the webpage
+ * Create restaurantLocal HTML and add it to the webpage
  */
-fillRestaurantHTML = (restaurant = self.restaurant) => {
+const fillRestaurantHTML = (restaurant = restaurantLocal) => {
     const name = document.getElementById('restaurant-name');
     name.innerHTML = restaurant.name;
 
     const address = document.getElementById('restaurant-address');
     address.innerHTML = restaurant.address;
 
-    const image = document.getElementById('restaurant-img');
-    image.className = 'restaurant-img';
+    const image: HTMLImageElement = <HTMLImageElement>document.getElementById('restaurant-img');
+    image.className = 'restaurantLocal-img';
     image.src = DBHelper.imageUrlForRestaurant(restaurant);
     image.alt = 'Photo of ' + restaurant.name;
     image.srcset = DBHelper.imageUrlForRestaurantLow(restaurant) + ' 400w';
@@ -104,9 +104,9 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 };
 
 /**
- * Create restaurant operating hours HTML table and add it to the webpage.
+ * Create restaurantLocal operating hours HTML table and add it to the webpage.
  */
-fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
+const fillRestaurantHoursHTML = (operatingHours = restaurantLocal.operating_hours) => {
     const hours = document.getElementById('restaurant-hours');
     for (let key in operatingHours) {
         const row = document.createElement('tr');
@@ -126,7 +126,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+const fillReviewsHTML = (reviews = restaurantLocal.reviews) => {
     const container = document.getElementById('reviews-container');
     const title = document.createElement('h2');
     title.innerHTML = 'Reviews';
@@ -148,7 +148,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 /**
  * Create review HTML and add it to the webpage.
  */
-createReviewHTML = (review) => {
+const createReviewHTML = (review) => {
     const li = document.createElement('li');
     const name = document.createElement('p');
     name.innerHTML = review.name;
@@ -170,9 +170,9 @@ createReviewHTML = (review) => {
 };
 
 /**
- * Add restaurant name to the breadcrumb navigation menu
+ * Add restaurantLocal name to the breadcrumb navigation menu
  */
-fillBreadcrumb = (restaurant = self.restaurant) => {
+const fillBreadcrumb = (restaurant = restaurantLocal) => {
     const breadcrumb = document.getElementById('breadcrumb');
     const li = document.createElement('li');
     li.innerHTML = restaurant.name;
@@ -182,9 +182,7 @@ fillBreadcrumb = (restaurant = self.restaurant) => {
 /**
  * Get a parameter by name from page URL.
  */
-getParameterByName = (name, url) => {
-    if (!url)
-        url = window.location.href;
+const getParameterByName = (name, url = window.location.href) => {
     name = name.replace(/[\[\]]/g, '\\$&');
     const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`),
         results = regex.exec(url);

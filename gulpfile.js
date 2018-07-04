@@ -5,14 +5,21 @@ const autoprefixer = require('gulp-autoprefixer');
 const browserSync = require('browser-sync').create();
 const ts = require('gulp-typescript');
 
-gulp.task('default', () => {
-    return gulp.watch('src/sass/**/*.scss', ['styles']);
+const OUTPUT = './dist';
+
+gulp.task('default', ['browser-sync', 'copy-html', 'styles', 'ts'], () => {
+
+    return gulp
+        .watch('src/sass/**/*.scss', ['styles'])
+        .watch('src/**/*.ts', ['ts'])
+        .watch('src/**/*.html', ['copy-html'])
+        .on('change', browserSync.reload);
 });
 
-gulp.task('html', () => {
+gulp.task('copy-html', () => {
     return gulp
         .src('src/**/*.html')
-        .dest('./build');
+        .dest(OUTPUT);
 });
 
 gulp.task('styles', () => {
@@ -24,12 +31,12 @@ gulp.task('styles', () => {
             browsers: ['last 2 versions', 'Chrome 31']
         }))
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('./build/css'))
+        .pipe(gulp.dest(`${OUTPUT}/css`))
 });
 
 
 // Static server
-gulp.task('browser-sync', function() {
+gulp.task('browser-sync', function () {
     browserSync.init({
         server: {
             baseDir: "./build"
@@ -43,5 +50,5 @@ gulp.task('ts', function () {
             noImplicitAny: true,
             outFile: 'output.js'
         }))
-        .pipe(gulp.dest('built/local'));
+        .pipe(gulp.dest(`${OUTPUT}`));
 });

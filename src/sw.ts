@@ -9,10 +9,10 @@ self.addEventListener('install', function(event) {
     const urlsToCache = [
         '/',
         '/index.html',
-        '/restaurant.html',
+        '/restaurantLocal.html',
         '/js/dbhelper.js',
-        '/js/main.js',
-        '/js/restaurant_info.js',
+        '/js/main.ts',
+        '/js/restaurant_info.ts',
         '/sass/normalize.sass',
         '/sass/styles.sass',
         'https://unpkg.com/leaflet@1.3.1/dist/leaflet.sass',
