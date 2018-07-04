@@ -11,28 +11,35 @@ document.addEventListener('DOMContentLoaded', (event) => {
 /**
  * Initialize leaflet map
  */
-const initMap = () => {
-    fetchRestaurantFromURL((error, restaurant) => {
-        if (error) { // Got an error!
-            console.error(error);
-        } else {
-            restaurantMap = L.map('map', {
-                center: [restaurant.latlng.lat, restaurant.latlng.lng],
-                zoom: 16,
-                scrollWheelZoom: false
-            });
-            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-                mapboxToken: 'pk.eyJ1IjoidHAxMjM0IiwiYSI6ImNqajRwY2tzYTFyZHUzdm10aXhiMmNpbG0ifQ.C3DNbn73iF-bJ94zpuzBTA',
-                maxZoom: 18,
-                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-                '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                id: 'mapbox.streets'
-            }).addTo(restaurantMap);
-            fillBreadcrumb();
-            DBHelper.mapMarkerForRestaurant(restaurant, restaurantMap);
-        }
-    });
+const initMap = async () => {
+    const restaurant = await fetchRestaurantFromURL();
+    if (restaurant) {
+        restaurantMap = L.map('map', {
+            center: [restaurant.latlng.lat, restaurant.latlng.lng],
+            zoom: 16,
+            scrollWheelZoom: false
+        });
+        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
+            mapboxToken: 'pk.eyJ1IjoidHAxMjM0IiwiYSI6ImNqajRwY2tzYTFyZHUzdm10aXhiMmNpbG0ifQ.C3DNbn73iF-bJ94zpuzBTA',
+            maxZoom: 18,
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+            '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            id: 'mapbox.streets'
+        }).addTo(restaurantMap);
+        fillBreadcrumb();
+        DBHelper.mapMarkerForRestaurant(restaurant, restaurantMap);
+    }
+    /*
+    const link = document
+        .createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css';
+    link.integrity = 'sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==';
+    link.crossOrigin = '';
+    link.type = 'text/css';
+    document.body.appendChild(link);
+    */
 };
 
 /* window.initMapMain = () => {
@@ -54,25 +61,19 @@ const initMap = () => {
 /**
  * Get current restaurantLocal from page URL.
  */
-const fetchRestaurantFromURL = (callback) => {
+const fetchRestaurantFromURL = async () => {
     if (restaurantLocal) { // restaurantLocal already fetched!
-        callback(null, restaurantLocal);
-        return;
+        return restaurantLocal;
     }
     const id = Number(getParameterByName('id'));
     if (!id) { // no id found in URL
         const error = 'No restaurantLocal id in URL';
-        callback(error, null);
+        console.error(error);
+        return null;
     } else {
-        DBHelper.fetchRestaurantById(id, (error, restaurant) => {
-            restaurantLocal = restaurant;
-            if (!restaurant) {
-                console.error(error);
-                return;
-            }
-            fillRestaurantHTML();
-            callback(null, restaurant)
-        });
+        restaurantLocal = await DBHelper.fetchRestaurantById(String(id));
+        fillRestaurantHTML();
+        return restaurantLocal;
     }
 };
 

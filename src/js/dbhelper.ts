@@ -8,135 +8,94 @@ class DBHelper {
      * Change this to restaurants.json file location on your server.
      */
     static get DATABASE_URL() {
-        const port = 3000; // Change this to your server port
-        return `http://localhost:${port}/data/restaurants.json`;
+        const port = 1337; // Change this to your server port
+        return `http://localhost:${port}/restaurants/`;
+    }
+
+    static getRestaurantUrl(restaurant: string) {
+        return `${this.DATABASE_URL}${restaurant}`;
     }
 
     /**
      * Fetch all restaurants.
      */
-    static fetchRestaurants(callback) {
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', DBHelper.DATABASE_URL);
-        xhr.onload = () => {
-            if (xhr.status === 200) { // Got a success response from server!
-                const json = JSON.parse(xhr.responseText);
-                const restaurants = json.restaurants;
-                callback(null, restaurants);
-            } else { // Oops!. Got an error from server.
-                const error = (`Request failed. Returned status of ${xhr.status}`);
-                callback(error, null);
-            }
-        };
-        xhr.send();
+    private static async fetchRestaurants(id: string = null) {
+        const url = id ? this.getRestaurantUrl(id) : this.DATABASE_URL;
+        const response = await fetch(url);
+        if (response.status == 200) {
+            return await response.json();
+        } else {
+            throw new Error(response.statusText);
+        }
     }
 
     /**
      * Fetch a restaurantLocal by its ID.
      */
-    static fetchRestaurantById(id, callback) {
+    static fetchRestaurantById(id: string) {
         // fetch all restaurants with proper error handling.
-        DBHelper.fetchRestaurants((error, restaurants) => {
-            if (error) {
-                callback(error, null);
-            } else {
-                const restaurant = restaurants.find(r => r.id === id);
-                if (restaurant) { // Got the restaurantLocal
-                    callback(null, restaurant);
-                } else { // Restaurant does not exist in the database
-                    callback('Restaurant does not exist', null);
-                }
-            }
-        });
+        return this.fetchRestaurants(id)
     }
 
     /**
      * Fetch restaurants by a cuisine type with proper error handling.
      */
-    static fetchRestaurantByCuisine(cuisine, callback) {
+    static async fetchRestaurantByCuisine(cuisine) {
         // Fetch all restaurants  with proper error handling
-        DBHelper.fetchRestaurants((error, restaurants) => {
-            if (error) {
-                callback(error, null);
-            } else {
-                // Filter restaurants to have only given cuisine type
-                const results = restaurants.filter(r => r.cuisine_type === cuisine);
-                callback(null, results);
-            }
-        });
+        const results = await this.fetchRestaurants();
+        return results.filter(r => r.cuisine_type === cuisine);
     }
 
     /**
      * Fetch restaurants by a neighborhood with proper error handling.
      */
-    static fetchRestaurantByNeighborhood(neighborhood, callback) {
+    static async fetchRestaurantByNeighborhood(neighborhood) {
         // Fetch all restaurants
-        DBHelper.fetchRestaurants((error, restaurants) => {
-            if (error) {
-                callback(error, null);
-            } else {
-                // Filter restaurants to have only given neighborhood
-                const results = restaurants.filter(r => r.neighborhood === neighborhood);
-                callback(null, results);
-            }
-        });
+        const results = await this.fetchRestaurants();
+        return results.filter(r => r.neighborhood === neighborhood);
     }
 
     /**
      * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
      */
-    static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
+    static async fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood) {
         // Fetch all restaurants
-        DBHelper.fetchRestaurants((error, restaurants) => {
-            if (error) {
-                callback(error, null);
-            } else {
-                let results = restaurants;
-                if (cuisine !== 'all') { // filter by cuisine
-                    results = results.filter(r => r.cuisine_type === cuisine);
-                }
-                if (neighborhood !== 'all') { // filter by neighborhood
-                    results = results.filter(r => r.neighborhood === neighborhood);
-                }
-                callback(null, results);
-            }
-        });
+        const results = await this.fetchRestaurants();
+        return results
+            .filter(r => neighborhood === 'all' || r.neighborhood === neighborhood)
+            .filter(r => cuisine === 'all' || r.cuisine_type === cuisine);
     }
 
     /**
      * Fetch all neighborhoods with proper error handling.
      */
-    static fetchNeighborhoods(callback) {
+    static async fetchNeighborhoods() {
         // Fetch all restaurants
-        DBHelper.fetchRestaurants((error, restaurants) => {
-            if (error) {
-                callback(error, null);
-            } else {
-                // Get all neighborhoods from all restaurants
-                const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood);
-                // Remove duplicates from neighborhoods
-                const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) === i);
-                callback(null, uniqueNeighborhoods);
-            }
-        });
+        const results = await this.fetchRestaurants();
+        return results
+            .map((v, i) => results[i].neighborhood)
+            .reduce((prev: string[], current: string) => {
+                if (prev.indexOf(current) === -1) {
+                    prev.push(current);
+                }
+                return prev;
+            }, []);
     }
 
     /**
      * Fetch all cuisines with proper error handling.
      */
-    static fetchCuisines(callback) {
+    static async fetchCuisines() {
         // Fetch all restaurants
-        DBHelper.fetchRestaurants((error, restaurants) => {
-            if (error) {
-                callback(error, null);
-            } else {
-                // Get all cuisines from all restaurants
-                const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type);
-                // Remove duplicates from cuisines
-                const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) === i);
-                callback(null, uniqueCuisines);
-            }
-        });
+        const results = await this.fetchRestaurants();
+        return results
+            .map((v, i) => results[i].cuisine_type)
+            .reduce((prev: string[], current: string) => {
+                if (prev.indexOf(current) === -1) {
+                    prev.push(current);
+                }
+                return prev;
+            }, []);
     }
 
     /**
@@ -150,14 +109,14 @@ class DBHelper {
      * Restaurant image URL.
      */
     static imageUrlForRestaurant(restaurant) {
-        return (`/img/${restaurant.photograph}`);
+        return (`/img/${restaurant.photograph}.jpg`);
     }
 
     /**
      * Restaurant image URL.
      */
     static imageUrlForRestaurantLow(restaurant) {
-        return (`/img/low-${restaurant.photograph}`);
+        return (`/img/low-${restaurant.photograph}.jpg`);
     }
 
     /**
@@ -175,17 +134,5 @@ class DBHelper {
         marker.addTo(map);
         return marker;
     }
-
-    /* static mapMarkerForRestaurant(restaurantLocal, map) {
-      const marker = new google.maps.Marker({
-        position: restaurantLocal.latlng,
-        title: restaurantLocal.name,
-        url: DBHelper.urlForRestaurant(restaurantLocal),
-        map: map,
-        animation: google.maps.Animation.DROP}
-      );
-      return marker;
-    } */
-
 }
 

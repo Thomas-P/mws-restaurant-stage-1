@@ -22,7 +22,6 @@ self.addEventListener('install', (event: ExtendableEvent) => {
         '/js/dbhelper.js',
         '/js/main.js',
         '/js/restaurant_info.js',
-        '/css/normalize.css',
         '/css/styles.css',
         'https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
         'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js'

@@ -1,9 +1,15 @@
 const gulp = require('gulp');
+
 const sass = require('gulp-sass');
-const sourcemaps = require('gulp-sourcemaps');
+const csso = require('gulp-csso');
 const autoprefixer = require('gulp-autoprefixer');
+const concat = require('gulp-concat');
+const sourcemaps = require('gulp-sourcemaps');
+const inlineCss = require('gulp-inline-css');
+
 const browserSync = require('browser-sync').create();
 const ts = require('gulp-typescript');
+const uglify = require('gulp-uglify-es').default;
 const mainProject = ts.createProject('tsconfig.json', {
     typescript: require('typescript')
 });
@@ -13,6 +19,7 @@ const OUTPUT = './dist';
 gulp.task('copy-html', () => {
     return gulp
         .src('src/**/*.html')
+        //.pipe(inlineCss())
         .pipe(gulp.dest(OUTPUT));
 });
 
@@ -22,8 +29,13 @@ gulp.task('styles', () => {
         .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer({
-            browsers: ['last 2 versions', 'Chrome 31']
+            browsers: ['last 2 versions']
         }))
+        .pipe(csso({
+            restructure: true,
+            debug: true
+        }))
+        .pipe(concat('styles.css'))
         .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(`${OUTPUT}/css`))
 });
@@ -42,14 +54,17 @@ gulp.task('browser-sync', () => {
 gulp.task('ts', function () {
     return gulp
         .src('src/**/*.ts')
+        .pipe(sourcemaps.init())
         .pipe(mainProject())
+        .pipe(uglify())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(`${OUTPUT}`));
 });
 
 gulp.task('copy-data', () => {
     return gulp
-        .src('src/data/**/*')
-        .pipe(gulp.dest(`${OUTPUT}/data`));
+        .src('src/**/*.json')
+        .pipe(gulp.dest(`${OUTPUT}`));
 });
 
 gulp.task('images', () => {

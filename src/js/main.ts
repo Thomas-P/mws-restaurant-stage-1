@@ -16,15 +16,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 /**
  * Fetch all neighborhoods and set their HTML.
  */
-const fetchNeighborhoods = () => {
-    DBHelper.fetchNeighborhoods((error, neighborhoods) => {
-        if (error) { // Got an error
-            console.error(error);
-        } else {
-            neighborhoodsLocal = neighborhoods;
-            fillNeighborhoodsHTML();
-        }
-    });
+const fetchNeighborhoods = async () => {
+    neighborhoodsLocal = await DBHelper.fetchNeighborhoods();
+    fillNeighborhoodsHTML();
 };
 
 /**
@@ -43,15 +37,9 @@ const fillNeighborhoodsHTML = (neighborhoods = neighborhoodsLocal) => {
 /**
  * Fetch all cuisines and set their HTML.
  */
-const fetchCuisines = () => {
-    DBHelper.fetchCuisines((error, cuisines) => {
-        if (error) { // Got an error!
-            console.error(error);
-        } else {
-            cuisinesLocal = cuisines;
-            fillCuisinesHTML();
-        }
-    });
+const fetchCuisines = async () => {
+    cuisinesLocal = await DBHelper.fetchCuisines();
+    fillCuisinesHTML();
 };
 
 /**
@@ -104,7 +92,7 @@ const initMapMain = () => {
 /**
  * Update page and map for current restaurants.
  */
-const updateRestaurants = () => {
+const updateRestaurants = async () => {
     const cSelect:HTMLSelectElement = <HTMLSelectElement>document.getElementById('cuisines-select');
     const nSelect:HTMLSelectElement = <HTMLSelectElement>document.getElementById('neighborhoods-select');
 
@@ -114,14 +102,10 @@ const updateRestaurants = () => {
     const cuisine = cSelect[cIndex].value;
     const neighborhood = nSelect[nIndex].value;
 
-    DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
-        if (error) { // Got an error!
-            console.error(error);
-        } else {
-            resetRestaurants(restaurants);
-            fillRestaurantsHTML();
-        }
-    })
+
+    const restaurants = await DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood);
+    resetRestaurants(restaurants);
+    fillRestaurantsHTML();
 };
 
 /**
@@ -206,4 +190,3 @@ const addMarkersToMap = (restaurants = restaurantList) => {
     self.markers.push(marker);
   });
 } */
-
