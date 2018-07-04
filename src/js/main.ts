@@ -141,13 +141,14 @@ const fillRestaurantsHTML = (restaurants = restaurantList) => {
  */
 const createRestaurantHTML = (restaurant) => {
     const li = document.createElement('li');
-
-    const image = document.createElement('img');
-    image.className = 'restaurant-img';
-    image.src = DBHelper.imageUrlForRestaurant(restaurant);
-    image.alt = 'Photo of ' + restaurant.name;
-    image.srcset = DBHelper.imageUrlForRestaurantLow(restaurant) + ' 400w';
-    li.appendChild(image);
+    if (restaurant.photograph) {
+        const image = document.createElement('img');
+        image.className = 'restaurant-img';
+        image.src = DBHelper.imageUrlForRestaurant(restaurant);
+        image.alt = 'Photo of ' + restaurant.name;
+        image.srcset = DBHelper.imageUrlForRestaurantLow(restaurant) + ' 400w';
+        li.appendChild(image);
+    }
 
     const name = document.createElement('h1');
     name.innerHTML = restaurant.name;

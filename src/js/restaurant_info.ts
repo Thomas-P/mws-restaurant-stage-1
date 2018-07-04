@@ -88,10 +88,15 @@ const fillRestaurantHTML = (restaurant = restaurantLocal) => {
     address.innerHTML = restaurant.address;
 
     const image: HTMLImageElement = <HTMLImageElement>document.getElementById('restaurant-img');
-    image.className = 'restaurantLocal-img';
-    image.src = DBHelper.imageUrlForRestaurant(restaurant);
-    image.alt = 'Photo of ' + restaurant.name;
-    image.srcset = DBHelper.imageUrlForRestaurantLow(restaurant) + ' 400w';
+    if (restaurant.photograph) {
+        image.className = 'restaurantLocal-img';
+        image.src = DBHelper.imageUrlForRestaurant(restaurant);
+        image.alt = 'Photo of ' + restaurant.name;
+        image.srcset = DBHelper.imageUrlForRestaurantLow(restaurant) + ' 400w';
+        image.style.visibility = 'visible';
+    } else {
+        image.style.visibility = 'hidden';
+    }
 
     const cuisine = document.getElementById('restaurant-cuisine');
     cuisine.innerHTML = restaurant.cuisine_type;
