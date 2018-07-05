@@ -1,5 +1,38 @@
 # Mobile Web Specialist Certification Course
 ---
+## Intallation guide
+
+To run this project, you also need to setup the backend server https://github.com/udacity/mws-restaurant-stage-3.
+
+After this install the dev dependencies via
+
+```
+npm install
+```
+
+and run then
+
+```
+gulp default
+
+```
+
+You have to install gulp globally, to use it via the command line.
+Otherwise it is possible to run it locally by calling:
+
+```
+npm run start
+```
+
+### Prerequisite
+
+* NodeJS >= 8.11.3 LTS
+* Modern web browser
+
+#### Did you struggle?
+
+Please provide information about your system, to help solving your problems.
+
 #### _Three Stage Course Material Project - Restaurant Reviews_
 
 ## Project Overview: Stage 1
