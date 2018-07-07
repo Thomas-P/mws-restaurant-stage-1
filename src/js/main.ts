@@ -134,6 +134,7 @@ const fillRestaurantsHTML = (restaurants = restaurantList) => {
         ul.appendChild(createRestaurantHTML(restaurant));
     });
     addMarkersToMap();
+    DBHelper.lazyLoadInit();
 };
 
 /**
@@ -141,16 +142,17 @@ const fillRestaurantsHTML = (restaurants = restaurantList) => {
  */
 const createRestaurantHTML = (restaurant) => {
     const li = document.createElement('li');
+    const name = document.createElement('h1');
     if (restaurant.photograph) {
         const image = document.createElement('img');
         image.className = 'restaurant-img';
-        image.src = DBHelper.imageUrlForRestaurant(restaurant);
+        image.src = '/img/placeholder.png';
+        image.dataset.src = DBHelper.imageUrlForRestaurant(restaurant);
         image.alt = 'Photo of ' + restaurant.name;
-        image.srcset = DBHelper.imageUrlForRestaurantLow(restaurant) + ' 400w';
+        image.dataset.srcset = DBHelper.imageUrlForRestaurantLow(restaurant) + ' 400w';
+        image.classList.add('lazy');
         li.appendChild(image);
     }
-
-    const name = document.createElement('h1');
     name.innerHTML = restaurant.name;
     li.appendChild(name);
 

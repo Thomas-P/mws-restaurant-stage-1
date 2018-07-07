@@ -2,6 +2,16 @@
   "short_name": "Reviews",
   "name": "RESTAURANT REVIEWS",
   "icons": [
+    {
+      "src": "/img/low-1.jpg",
+      "type": "image/jpg",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/img/1.jpg",
+      "type": "image/jpg",
+      "sizes": "512x512"
+    }
   ],
   "start_url": "/index.html",
   "background_color": "#252831",

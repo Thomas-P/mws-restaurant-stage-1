@@ -74,6 +74,7 @@ gulp.task('images', () => {
 });
 
 gulp.task('default', gulp.parallel('ts', 'styles', 'copy-html', 'copy-data', 'images', 'browser-sync'));
+gulp.task('build', gulp.parallel('ts', 'styles', 'copy-html', 'copy-data', 'images'));
 
 
 gulp.task('watch', () => {
