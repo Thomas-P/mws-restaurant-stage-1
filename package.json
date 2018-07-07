@@ -4,7 +4,9 @@
   "description": "Mobile Website",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "gulp default watch",
+    "start": "gulp default"
   },
   "repository": {
     "type": "git",
@@ -28,7 +30,7 @@
     "gulp-sass": "^4.0.1",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-tslint": "^8.1.3",
-    "gulp-typescript": "^5.0.0-alpha.2",
+    "gulp-typescript": "^5.0.0-alpha.3",
     "gulp-uglify-es": "^1.0.4",
     "tslint": "^5.10.0",
     "typescript": "^2.9.2"

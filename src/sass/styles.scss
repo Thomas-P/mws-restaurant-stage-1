@@ -272,26 +272,118 @@ nav {
   width: 100%;
 }
 
-#restaurant-container, #reviews-container {
+#restaurant-container, #reviews-container, #reviews-editor {
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
   width: 100%;
 }
 
-#restaurant-container {
+#restaurant-container, #reviews-editor {
   padding: 30px 40px 80px;
 }
 
-#reviews-container {
+#reviews-container, #reviews-editor {
   padding: 30px 40px;
+
+  a {
+    background-color: orange;
+    border-bottom: 3px solid #eee;
+    color: #fff;
+    display: inline-block;
+    font-size: 10pt;
+    margin: 15px 0 0;
+    padding: 8px 30px 10px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    color: #f58500;
+    font-size: 24pt;
+    font-weight: 300;
+    letter-spacing: -1px;
+    padding-bottom: 1pt;
+  }
 }
 
-#reviews-container h2 {
-  color: #f58500;
-  font-size: 24pt;
-  font-weight: 300;
-  letter-spacing: -1px;
-  padding-bottom: 1pt;
+#reviews-editor {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  h2 {
+    margin: 0;
+  }
+  label {
+    margin: 20px 0 0 0;
+    &[for=name]:after {
+      content: '*';
+      color: #9f0000;
+    }
+  }
+
+  textarea {
+    height: 200px;
+  }
+  button {
+    background-color: orange;
+    border-bottom: 3px solid #eee;
+    color: #000;
+    display: inline-block;
+    font-size: 10pt;
+    margin: 15px 0 0;
+    padding: 8px 30px 10px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    &:disabled {
+      background: #d9d9d9;
+    }
+  }
+
+  ul {
+    user-select: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: block;
+    li {
+      user-select: none;
+      display: inline-block;
+      font-size: 2em;
+      cursor: pointer;
+      padding: 0;
+
+      input[type=radio] {
+        opacity: 0;
+      }
+      label {
+        user-select: none;
+        position: relative;
+        overflow: hidden;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        display: block;
+        margin: 0;
+
+        span {
+          position: absolute;
+          top: -5px;
+          left: 3px;
+        }
+
+        &.focus {
+          border: solid 1px #3397db;
+          border-radius: 5px;
+          box-shadow: #d9d9d9 -1px -1px 1px;
+        }
+        &.chosen {
+          color: #33a0e5;
+        }
+      }
+    }
+  }
 }
 
 #reviews-list {
@@ -382,7 +474,7 @@ nav {
     align-items: stretch;
   }
 
-  #restaurant-container {
+  #restaurant-container, #reviews-editor {
     width: 50%;
   }
 
