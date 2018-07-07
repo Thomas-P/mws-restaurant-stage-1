@@ -81,6 +81,9 @@ const fetchRestaurantFromURL = async () => {
  * Create restaurantLocal HTML and add it to the webpage
  */
 const fillRestaurantHTML = (restaurant = restaurantLocal) => {
+    if (!restaurant) {
+        return;
+    }
     const name = document.getElementById('restaurant-name');
     name.innerHTML = restaurant.name;
 
@@ -132,12 +135,12 @@ const fillRestaurantHoursHTML = (operatingHours = restaurantLocal.operating_hour
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-const fillReviewsHTML = (reviews = restaurantLocal.reviews) => {
+const fillReviewsHTML = (reviews = restaurantLocal.reviews, restaurant = restaurantLocal) => {
     const container = document.getElementById('reviews-container');
-    const title = document.createElement('h2');
-    title.innerHTML = 'Reviews';
-    container.appendChild(title);
-
+    const writeReview: HTMLAnchorElement = <HTMLAnchorElement>document.getElementById('write-review');
+    if (writeReview) {
+        writeReview.href = DBHelper.urlForReview(restaurant);
+    }
     if (!reviews) {
         const noReviews = document.createElement('p');
         noReviews.innerHTML = 'No reviews yet!';

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="preload" href="/css/styles.css" type="text/css" as="style">
+    <link rel="manifest" href="/manifest.json">
+    <title>Restaurant Info</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8"/>
+    <meta name="theme-color" content="#3397db"/>
+</head>
+
+<body class="inside">
+    <!-- Beginning header -->
+    <header>
+        <!-- Beginning nav -->
+        <nav>
+            <h1><a href="/">Restaurant Reviews</a></h1>
+        </nav>
+        <!-- Beginning breadcrumb -->
+        <ul id="breadcrumb" aria-label="Breadcrumb">
+            <li><a href="/">Home</a></li>
+        </ul>
+        <!-- End breadcrumb -->
+        <!-- End nav -->
+    </header>
+    <!-- End header -->
+
+    <!-- Beginning main -->
+    <main id="maincontent">
+        <!-- Beginning restaurant_id -->
+        <section id="restaurant-container">
+            <h2 id="restaurant-name"></h2>
+            <img id="restaurant-img"/>
+            <p id="restaurant-cuisine"></p>
+            <p id="restaurant-address"></p>
+            <table id="restaurant-hours"></table>
+        </section>
+        <!-- end restaurant_id -->
+        <!-- Beginning map -->
+        <!-- End map -->
+        <!-- Beginning reviews -->
+        <section id="reviews-editor">
+            <h2>Write a review</h2>
+            <label for="name">Name</label>
+            <input type="text" name="name" id="name"/>
+            <label>Rating</label>
+            <!--★	9733	2605	 	BLACK STAR-->
+            <!--☆	9734	2606	 	WHITE STAR-->
+            <ul id="review-ranking">
+                <li>
+                    <label>
+                        <span>★</span>
+                        <input type="radio" name="rating" value="1" title="1 Star"/>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <span>★</span>
+                        <input type="radio" name="rating" value="2" title="2 Stars"/>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <span>★</span>
+                        <input type="radio" name="rating" value="3" title="3 Stars"/>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <span>★</span>
+                        <input type="radio" name="rating" value="4" title="4 Stars"/>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <span>★</span>
+                        <input type="radio" name="rating" value="5" title="5 Stars"/>
+                    </label>
+                </li>
+            </ul>
+            <label for="review">Review</label>
+            <textarea name="review" id="review"></textarea>
+            <button name="addReview" id="add-review">Add your review</button>
+        </section>
+        <!-- End reviews -->
+    </main>
+    <!-- End main -->
+
+    <!-- Beginning footer -->
+    <footer id="footer">
+        Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+    </footer>
+    <!-- End footer -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <!-- Beginning scripts -->
+    <!-- Database helpers -->
+    <script type="text/javascript" src="/js/dbhelper.js"></script>
+    <!-- Main javascript file -->
+    <script type="text/javascript" src="/js/review.js"></script>
+    <!-- Google Maps -->
+    <!--  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_tKbW6A5pQ-eupxI56myUnHLqYCzOjKo&libraries=places&callback=initMap"></script> -->
+    <!-- End scripts -->
+    <script type="application/javascript" charset="UTF-8" src="/sw-register.js"></script>
+</body>
+
+</html>
