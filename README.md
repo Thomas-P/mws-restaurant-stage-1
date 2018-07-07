@@ -4,6 +4,8 @@
 
 To run this project, you also need to setup the backend server https://github.com/udacity/mws-restaurant-stage-3.
 
+The frontend is available at https://newagent-86c06.firebaseapp.com/ for the audit.
+
 ### Prerequisite
 
 * NodeJS >= 8.11.3 LTS
