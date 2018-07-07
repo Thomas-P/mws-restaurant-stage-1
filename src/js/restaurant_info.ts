@@ -93,10 +93,12 @@ const fillRestaurantHTML = (restaurant = restaurantLocal) => {
     const image: HTMLImageElement = <HTMLImageElement>document.getElementById('restaurant-img');
     if (restaurant.photograph) {
         image.className = 'restaurantLocal-img';
-        image.src = DBHelper.imageUrlForRestaurant(restaurant);
+        image.src = '/img/placeholder.png';
+        image.dataset.src = DBHelper.imageUrlForRestaurant(restaurant);
         image.alt = 'Photo of ' + restaurant.name;
-        image.srcset = DBHelper.imageUrlForRestaurantLow(restaurant) + ' 400w';
+        image.dataset.srcset = DBHelper.imageUrlForRestaurantLow(restaurant) + ' 400w';
         image.style.visibility = 'visible';
+        image.classList.add('lazy');
     } else {
         image.style.visibility = 'hidden';
     }
@@ -110,6 +112,7 @@ const fillRestaurantHTML = (restaurant = restaurantLocal) => {
     }
     // fill reviews
     fillReviewsHTML();
+    DBHelper.lazyLoadInit();
 };
 
 /**

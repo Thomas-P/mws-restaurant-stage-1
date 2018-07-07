@@ -137,10 +137,12 @@ function localScope() {
         const image: HTMLImageElement = <HTMLImageElement>document.getElementById('restaurant-img');
         if (restaurant.photograph) {
             image.className = 'restaurantLocal-img';
-            image.src = DBHelper.imageUrlForRestaurant(restaurant);
+            image.src = '/img/placeholder.png';
+            image.dataset.src = DBHelper.imageUrlForRestaurant(restaurant);
             image.alt = 'Photo of ' + restaurant.name;
-            image.srcset = DBHelper.imageUrlForRestaurantLow(restaurant) + ' 400w';
+            image.dataset.srcset = DBHelper.imageUrlForRestaurantLow(restaurant) + ' 400w';
             image.style.visibility = 'visible';
+            image.classList.add('lazuy')
         } else {
             image.style.visibility = 'hidden';
         }
@@ -152,6 +154,7 @@ function localScope() {
         if (restaurant.operating_hours) {
             fillRestaurantHoursHTML();
         }
+        DBHelper.lazyLoadInit();
     };
 
     /**
